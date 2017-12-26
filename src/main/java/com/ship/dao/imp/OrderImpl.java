@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -22,12 +24,13 @@ import com.ship.domain.Ward;
 import com.ship.dao.OrderDAO;
 
 public class OrderImpl implements OrderDAO {
+	//public static final Map<String, OrderStatus> ORDER_STATUS_MAP = getOrderStatus();
 
 	String insert_order = "INSERT INTO `ORDER` "
-			+ "(CUSTOMER_NAME, ADDRESS, FEE_SHIP, FEE_PRODUCT, FEE_TOTAL, NOTE, DATE ) VALUES (?, ?, ?, ?, ?, ?, ?);";
+			+ "(INDEX, ID_ORDER, CUSTOMER_NAME, ADDRESS, FEE_SHIP, FEE_PRODUCT, FEE_TOTAL, NOTE, DATE , ID_USER, ID_STATUS_ORDER, ID_DISTRICT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? , ?, ?, ? );";
 	String SELECT_ORDER = "select * from `order` where 	`date` between " + "'@@'" + " and " + "'@@@'" + " order by date desc;";
 
-	private DataSource dataSource;
+	private static DataSource dataSource;
 
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
@@ -45,13 +48,18 @@ public class OrderImpl implements OrderDAO {
 		try {
 			conn = dataSource.getConnection();
 			PreparedStatement ps = conn.prepareStatement(insert_order);
-			ps.setString(1, order.getCustomerName());
-			ps.setString(2, order.getAddress());
-			ps.setDouble(3, order.getShipFee());
-			ps.setDouble(4, order.getProductFee());
-			ps.setDouble(5, order.getTotalFee());
-			ps.setString(6, order.getNote());
-			ps.setString(7, Utils.dateFormat(order.getDate()));
+			ps.setInt(1, order.getIndex());
+			ps.setString(2, order.getIdOrder());
+			ps.setString(3, order.getCustomerName());
+			ps.setString(4, order.getAddress());
+			ps.setDouble(5, order.getShipFee());
+			ps.setDouble(6, order.getProductFee());
+			ps.setDouble(7, order.getTotalFee());
+			ps.setString(8, order.getNote());
+			ps.setString(9, Utils.dateFormat(order.getDate()));
+			ps.setString(10, "");
+			ps.setString(11, "");
+			ps.setString(12, "");
 			ps.executeUpdate();
 			ps.close();
 
@@ -118,17 +126,20 @@ public class OrderImpl implements OrderDAO {
 
 	}
 
-	public OrderStatus getOrderStatus(String statusId) {
-		String SELECT_ORDER_STATUS = "SELECT * FROM `ORDER_STATUS` WHERE `ID_ORDER_STATUS` = '" + statusId + "'";
+	public static Map<String, OrderStatus> getOrderStatus() {
+		String SELECT_ORDER_STATUS = "SELECT * FROM `ORDER_STATUS`;";
+		Map<String, OrderStatus> map = new HashMap<>();
 		Connection conn = null;
 		try {
 			conn = dataSource.getConnection();
 			PreparedStatement ps = conn.prepareStatement(SELECT_ORDER_STATUS);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				return new OrderStatus(rs.getString("ID_ORDER_STATUS"), rs.getString("STATUS"));
+				map.put(rs.getString("ID_ORDER_STATUS"), new OrderStatus(rs.getString("ID_ORDER_STATUS"), rs.getString("STATUS")));
 			}
 			rs.close();
+			return map;
+			
 		} catch (SQLException e) {
 
 			e.printStackTrace();
@@ -143,6 +154,7 @@ public class OrderImpl implements OrderDAO {
 		}
 		return null;
 	}
+	
 
 	/*
 	 * public City getFullAddress(String disstrictId){ String SELECT_CTIY = ``

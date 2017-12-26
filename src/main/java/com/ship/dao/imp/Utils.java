@@ -6,9 +6,18 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.sql.DataSource;
 import javax.swing.text.DateFormatter;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 public class Utils {
+	
+	public static ApplicationContext context =
+    		new ClassPathXmlApplicationContext("Spring-Module.xml");
+	private static DataSource dataSource;
+	
 	public static String dateFormat(Date date){
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String reportDate = df.format(date);
