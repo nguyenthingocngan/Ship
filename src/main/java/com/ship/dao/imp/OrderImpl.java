@@ -27,7 +27,7 @@ public class OrderImpl implements OrderDAO {
 	//public static final Map<String, OrderStatus> ORDER_STATUS_MAP = getOrderStatus();
 
 	String insert_order = "INSERT INTO `ORDER` "
-			+ "(INDEX, ID_ORDER, CUSTOMER_NAME, ADDRESS, FEE_SHIP, FEE_PRODUCT, FEE_TOTAL, NOTE, DATE , ID_USER, ID_STATUS_ORDER, ID_DISTRICT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? , ?, ?, ? );";
+			+ "(ID_ORDER, CUSTOMER_NAME, ADDRESS, FEE_SHIP, FEE_PRODUCT, FEE_TOTAL, NOTE, DATE , ID_USER, ID_STATUS_ORDER, ID_DISTRICT) VALUES ( ?, ?, ?, ?, ?, ?, ?, ? , ?, ?, ? );";
 	String SELECT_ORDER = "select * from `order` where 	`date` between " + "'@@'" + " and " + "'@@@'" + " order by date desc;";
 
 	private static DataSource dataSource;
@@ -48,18 +48,17 @@ public class OrderImpl implements OrderDAO {
 		try {
 			conn = dataSource.getConnection();
 			PreparedStatement ps = conn.prepareStatement(insert_order);
-			ps.setInt(1, order.getIndex());
-			ps.setString(2, order.getIdOrder());
-			ps.setString(3, order.getCustomerName());
-			ps.setString(4, order.getAddress());
-			ps.setDouble(5, order.getShipFee());
-			ps.setDouble(6, order.getProductFee());
-			ps.setDouble(7, order.getTotalFee());
-			ps.setString(8, order.getNote());
-			ps.setString(9, Utils.dateFormat(order.getDate()));
+			ps.setString(1, order.getIdOrder());
+			ps.setString(2, order.getCustomerName());
+			ps.setString(3, order.getAddress());
+			ps.setDouble(4, order.getShipFee());
+			ps.setDouble(5, order.getProductFee());
+			ps.setDouble(6, order.getTotalFee());
+			ps.setString(7, order.getNote());
+			ps.setString(8, Utils.dateFormat(order.getDate()));
+			ps.setString(9, order.getUser().getUserId());
 			ps.setString(10, "");
 			ps.setString(11, "");
-			ps.setString(12, "");
 			ps.executeUpdate();
 			ps.close();
 
@@ -93,7 +92,7 @@ public class OrderImpl implements OrderDAO {
 			conn = dataSource.getConnection();
 			PreparedStatement ps = conn.prepareStatement(SELECT_ORDER);
 			ResultSet result = ps.executeQuery();
-			if (result.next()) {
+			while (result.next()) {
 				int index = result.getInt("INDEX");
 				String orderId = result.getString("ID_ORDER");
 				String customerName = result.getString("CUSTOMER_NAME");
@@ -107,7 +106,7 @@ public class OrderImpl implements OrderDAO {
 				String statusId = result.getString("ID_STATUS_ORDER");
 				String addressId = result.getString("ID_DISTRICT");
 				list.add(new Order(index, orderId, customerName, address, totalFee, shipFee, productFee, note, date,
-						new User(), new OrderStatus(), new City(), new District(), new Ward()));
+						new User(), Utils.ORDER_STATUS_MAP.get(statusId), new City(), new District(), new Ward()));
 			}
 			ps.close();
 			return list;

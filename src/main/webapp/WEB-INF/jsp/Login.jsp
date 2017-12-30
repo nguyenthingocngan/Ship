@@ -16,9 +16,9 @@
 <!-- MUST BE THE LAST SCRIPT IN <HEAD></HEAD></HEAD> png fix -->
 <script src="js/jquery/jquery.pngFix.pack.js" type="text/javascript"></script>
 <script type="text/javascript">
-	/* $(document).ready(function(){
+	 $(document).ready(function(){
 	 $(document).pngFix( );
-	 }); */
+	 });
 </script>
 </head>
 <body id="login-bg">

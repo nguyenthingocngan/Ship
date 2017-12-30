@@ -1,5 +1,4 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<!-- <link rel="stylesheet" href="css/screen.css" type="text/css" /> -->
 <link rel="stylesheet" href="css/jquery-ui-min.css" type="text/css" />
 <link rel="icon" 
       type="image/png" 

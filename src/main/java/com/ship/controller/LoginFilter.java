@@ -55,8 +55,8 @@ public class LoginFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession(false);
 		String uri = req.getRequestURI();
-		response.setContentType("text/html;charset=UTF-8");
-		request.setCharacterEncoding("utf-8");
+		//response.setContentType("text/html;charset=UTF-8");
+		//request.setCharacterEncoding("utf-8");
 		if ("/Ship/doLogin.html".equals(uri)) {
 			chain.doFilter(request, response);
 			
@@ -75,8 +75,8 @@ public class LoginFilter implements Filter {
 				// "/Login.html"));
 				RequestDispatcher rd = req.getRequestDispatcher("/login.html");
 				rd.forward(request, response);
-				response.setContentType("text/html;charset=UTF-8");
-				request.setCharacterEncoding("utf-8");
+				//response.setContentType("text/html;charset=UTF-8");
+				//request.setCharacterEncoding("utf-8");
 				return;
 
 			}

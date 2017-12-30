@@ -37,6 +37,7 @@ function createPopup() {
 	return false;
 }
 
+
 	function validateEmail(sEmail) {
 	    var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
 	    if (filter.test(sEmail)) {
@@ -103,5 +104,6 @@ function createPopup() {
 			</c:forEach>
 		</tbody>
 	</table>
+	<%-- <h1><c:out value="${orderMessage}"/></h1> --%>
 </body>
 </html>

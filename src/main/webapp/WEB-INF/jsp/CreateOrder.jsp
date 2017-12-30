@@ -5,6 +5,7 @@
 <head>
 <%@ include file="Header.jsp"%>
 <title>Create Order</title>
+
 <script type="text/javascript">
 	function closePopup() {
 		$(".ui-front").dialog().dialog('close');
@@ -37,8 +38,9 @@
 				// we have the response
 
 				if (response.status == "SUCCESS") {
-
-					createPopupConfirm();
+					closePopup();
+					alert("create order successfully");
+					httpGetAsync("home.html");
 					//return true;
 
 				} else {
@@ -215,7 +217,18 @@
 	        return false;
 	    }
 	}
+	function httpGetAsync(theUrl, callback)
+	{
+	    var xmlHttp = new XMLHttpRequest();
+	    xmlHttp.onreadystatechange = function() { 
+	        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+	            callback(xmlHttp.responseText);
+	    }
+	    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+	    xmlHttp.send(null);
+	}
 </script>
+<link rel="stylesheet" href="css/screen.css" type="text/css" />
 </head>
 <body>
 
