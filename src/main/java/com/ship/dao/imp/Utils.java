@@ -91,6 +91,11 @@ public class Utils {
 	//subtract 10 days
 	calendar.add(Calendar.DAY_OF_MONTH, -1);
 	System.out.println("Date : " + sdf.format(calendar.getTime()));
+	
+	Date toDate = new Date();
+	Date fromDate = Utils.afterOneDayDate(toDate);
+	System.out.println(dateFormat(toDate));
+	System.out.println(dateFormat(fromDate));
 	}
 
 }
